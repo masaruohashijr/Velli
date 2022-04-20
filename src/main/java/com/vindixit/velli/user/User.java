@@ -1,6 +1,5 @@
 package com.vindixit.velli.user;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.vindixit.velli.office.Office;
+import com.vindixit.velli.role.Role;
 
 @Entity
 public class User {
@@ -24,6 +24,10 @@ public class User {
     
     @OneToOne(mappedBy = "chief")    
     private Office headedOffice;
+
+    @ManyToOne
+    @JoinColumn(name = "id_role")    
+    private Role role;
 
     public int getId() {
         return id;
@@ -54,6 +58,12 @@ public class User {
     }
     public void setHeadedOffice(Office headedOffice) {
         this.headedOffice = headedOffice;
+    }
+    public Role getRole() {
+        return role;
+    }
+    public void setRole(Role role) {
+        this.role = role;
     }    
     
 }
