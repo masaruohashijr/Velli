@@ -14,6 +14,7 @@ import com.vindixit.velli.membro.Membro;
 import com.vindixit.velli.membro.MembroRepository;
 import com.vindixit.velli.perfil.Perfil;
 import com.vindixit.velli.perfil.PerfilRepository;
+import com.vindixit.velli.plano.Plano;
 import com.vindixit.velli.usuario.Usuario;
 import com.vindixit.velli.usuario.UsuarioRepository;
 
@@ -34,13 +35,14 @@ public class VelliApplication {
 	@Autowired
 	private JurisdicaoRepository jurisdicaoRepository;
 	@Autowired
-	private PerfilRepository perfilRepository;
-	@Autowired
 	private UsuarioRepository usuarioRepository;
+	@Autowired
+	private PerfilRepository perfilRepository;
 
-	@Bean
+	// @Bean
 	public CommandLineRunner removeAll() {
 		return (args) -> {
+			perfilRepository.deleteAll();
 			jurisdicaoRepository.deleteAll();
 			membroRepository.deleteAll();
 			usuarioRepository.deleteAll();
@@ -49,7 +51,7 @@ public class VelliApplication {
 		};
 	}
 
-	@Bean
+	//@Bean
 	public CommandLineRunner criaEntidadeComoJurisdicaoDeEscritorio(EntidadeRepository repository) {
 		return (args) -> {
 			Entidade entidade = novaEntidadeMock();
@@ -63,11 +65,29 @@ public class VelliApplication {
 			jurisdicaoRepository.save(jurisdicao);
 		};
 	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(VelliApplication.class, args);
 	}
-	
+
 	@Bean
+	public CommandLineRunner criaEntidadeEPlano(EntidadeRepository repository) {
+		return (args) -> {
+			Entidade entidade = novaEntidadeMock();
+			Plano plano = novoPlanoMock();
+			List<Plano> planos = new ArrayList<Plano>();
+			planos.add(plano);
+			plano.setEntidade(entidade);
+			entidade.setPlanos(planos);
+			repository.save(entidade);
+			repository.findAll().forEach(e -> {
+				System.out.println(e.getName());
+				System.out.println(e.getPlanos().size());
+			});			
+		};
+	};
+
+	//@Bean
 	public CommandLineRunner criaUsuarioEPerfilComoMembroDeEscritorio(UsuarioRepository repository) {
 		return (args) -> {
 			Usuario usuario = novoUsuarioMock();
@@ -81,8 +101,8 @@ public class VelliApplication {
 
 			List<Usuario> usuarios = new ArrayList<Usuario>();
 			usuarios.add(usuario);
-			//perfilRepository.save(perfil);
-			
+			// perfilRepository.save(perfil);
+
 			usuario.setPerfil(perfil);
 			escritorio.setChefe(usuario);
 			repository.save(usuario);
@@ -135,5 +155,27 @@ public class VelliApplication {
 		entidade.setName("SISTEL");
 		return entidade;
 	}
+
+	private Plano novoPlanoMock() {
+		Plano plano = new Plano();
+		plano.setName("BD");
+		plano.setRecurso("R$ 1.000.000,00");
+		plano.setCnpb("202201");
+		return plano;
+	}
+
+// 1 - Entidade 
+// você recebe uma entidade
+// endpoint java recebe json da entidade
+// eu quero só o objeto que representa a entidade
+
+/*
+Vou criar um objeto Entidade
+Vou criar um objeto Plano
+Vou injetar Plano em Entidade
+Vou salvar Entidade e persistir o Plano da Entidade
+Qual o desafio?
+Trazer o nome do plano selecionando a entidade.
+*/
 
 }
