@@ -1,4 +1,4 @@
-package com.vindixit.velli.role;
+package com.vindixit.velli.perfil;
 
 import java.util.List;
 
@@ -10,21 +10,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.vindixit.velli.user.User;
+import com.vindixit.velli.usuario.Usuario;
 
 @Entity
-public class Role {
+public class Perfil {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)    
-    private int id;    
+    private Long id;    
     private String name;
-    @OneToMany(mappedBy="role", fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
-    private List<User> users;   
+    @OneToMany(mappedBy="perfil", fetch=FetchType.LAZY, cascade = {CascadeType.MERGE})
+    private List<Usuario> users;   
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getName() {
@@ -33,10 +33,10 @@ public class Role {
     public void setName(String name) {
         this.name = name;
     }
-    public List<User> getUsers() {
+    public List<Usuario> getUsers() {
         return users;
     }
-    public void setUsers(List<User> users) {
+    public void setUsers(List<Usuario> users) {
         this.users = users;
     }
     
