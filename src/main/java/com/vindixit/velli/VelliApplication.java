@@ -82,7 +82,7 @@ public class VelliApplication {
 			repository.save(entidade);
 			repository.findAll().forEach(e -> {
 				System.out.println(e.getName());
-				System.out.println(e.getPlanos().size());
+				e.getPlanos().forEach(p->System.out.println(p.getName()));
 			});			
 		};
 	};
