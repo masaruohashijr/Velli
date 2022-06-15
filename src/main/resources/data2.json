@@ -1,0 +1,30 @@
+{
+    "name": "Brasilia",
+    "abreviatura": "BSB",
+    "descricao": "Escritório de Brasilia",
+    "chefe": {
+        "id": 1
+    },
+    "usuarios": [
+        {
+            "name": "Dorval Souza",
+            "email": "Rosalvo57@live.com",
+            "telefone": "+55 (34) 5464-4594"
+        },
+        {
+            "name": "Aldenir Batista Neto",
+            "email": "Linneu.Moreira37@live.com",
+            "telefone": "+55 (25) 8261-0262"
+        },
+        {
+            "name": "Christine Melo",
+            "email": "Matias32@hotmail.com",
+            "telefone": "(57) 67942-9674"
+        },
+        {
+            "name": "Magali Oliveira",
+            "email": "Edirez69@hotmail.com",
+            "telefone": "+55 (05) 4504-8786"
+        }
+    ]
+}

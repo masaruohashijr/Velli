@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import com.vindixit.velli.jurisdicao.Jurisdicao;
 import com.vindixit.velli.membro.Membro;
@@ -36,6 +37,9 @@ public class Escritorio {
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_chefe", referencedColumnName = "id")
     private Usuario chefe;
+
+    @Transient
+    private List<Usuario> usuarios;
 
     public Long getId() {
         return id;
@@ -91,6 +95,14 @@ public class Escritorio {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 
 }

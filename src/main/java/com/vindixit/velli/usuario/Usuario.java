@@ -24,6 +24,7 @@ public class Usuario {
     private Long id;    
     private String name;    
     private String email;
+    private String telefone;
     
     @OneToMany(mappedBy="escritorio", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Membro> membros;
@@ -70,6 +71,12 @@ public class Usuario {
     }
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
+    }
+    public String getTelefone() {
+        return telefone;
+    }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
     
 }

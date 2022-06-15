@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class VelliApplication {
 	@Autowired
 	private PerfilRepository perfilRepository;
 	private Escritorio office;
-	@Bean
+	//@Bean
 	public CommandLineRunner criaEscritorioComTresMembros(UsuarioRepository repository) {
 
 		return (args) -> {
@@ -70,6 +71,30 @@ public class VelliApplication {
 			m2.setEscritorio(office);
 			membros.add(m1);
 			membros.add(m2);
+			office.setMembros(membros);
+			escritorioRepository.save(office);
+		};
+	}
+	@Bean
+	public CommandLineRunner criaEscritorioComQuatroMembros(UsuarioRepository repository) {
+
+		return (args) -> {
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				office = mapper.readValue(new File("src/main/resources/data2.json"), Escritorio.class);
+				System.out.println(office);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			List<Usuario> usuarios = office.getUsuarios();
+			usuarios.forEach(u->{repository.save(u);});
+			List<Membro> membros = new LinkedList<Membro>();
+			usuarios.forEach(u->{
+				Membro m = new Membro();
+				m.setEscritorio(office);
+				m.setUsuario(u);
+				membros.add(m);
+			});
 			office.setMembros(membros);
 			escritorioRepository.save(office);
 		};
