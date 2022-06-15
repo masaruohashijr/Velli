@@ -1,9 +1,18 @@
 package com.vindixit.velli;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vindixit.velli.entidade.Entidade;
 import com.vindixit.velli.entidade.EntidadeRepository;
 import com.vindixit.velli.escritorio.Escritorio;
@@ -18,14 +27,8 @@ import com.vindixit.velli.plano.Plano;
 import com.vindixit.velli.usuario.Usuario;
 import com.vindixit.velli.usuario.UsuarioRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
 @SpringBootApplication
-public class VelliApplication {
+public class VelliApplication {	
 	@Autowired
 	private EntidadeRepository entidadeRepository;
 	@Autowired
@@ -38,6 +41,43 @@ public class VelliApplication {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private PerfilRepository perfilRepository;
+	private Escritorio office;
+	@Bean
+	public CommandLineRunner criaEscritorioComTresMembros(UsuarioRepository repository) {
+
+		return (args) -> {
+			List<Membro> membros  = new ArrayList<Membro>();
+			Usuario u1 = new Usuario();
+			u1.setName("Masaru Ohashi Jr");
+			u1.setEmail("masaru@vindixit.com");
+			Usuario u2 = new Usuario();
+			u2.setName("Ricardo Tomatieli");
+			u2.setEmail("ricardo@vindixit.com");
+			repository.save(u1);
+			repository.save(u2);
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				office = mapper.readValue(new File("src/main/resources/data.json"), Escritorio.class);
+				System.out.println(office);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Membro m1 = new Membro();
+			m1.setUsuario(u1);
+			m1.setEscritorio(office);
+			Membro m2 = new Membro();
+			m2.setUsuario(u2);
+			m2.setEscritorio(office);
+			membros.add(m1);
+			membros.add(m2);
+			office.setMembros(membros);
+			escritorioRepository.save(office);
+		};
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(VelliApplication.class, args);
+	}
 
 	// @Bean
 	public CommandLineRunner removeAll() {
@@ -66,11 +106,7 @@ public class VelliApplication {
 		};
 	}
 
-	public static void main(String[] args) {
-		SpringApplication.run(VelliApplication.class, args);
-	}
-
-	@Bean
+	//@Bean
 	public CommandLineRunner criaEntidadeEPlano(EntidadeRepository repository) {
 		return (args) -> {
 			Entidade entidade = novaEntidadeMock();
@@ -87,6 +123,10 @@ public class VelliApplication {
 		};
 	};
 
+	//@Bean
+	public CommandLineRunner criaStatusEAcaoEAtividadeComPapelEmWorkflow() {
+		return null;
+	}
 	//@Bean
 	public CommandLineRunner criaUsuarioEPerfilComoMembroDeEscritorio(UsuarioRepository repository) {
 		return (args) -> {
@@ -179,3 +219,4 @@ Trazer o nome do plano selecionando a entidade.
 */
 
 }
+

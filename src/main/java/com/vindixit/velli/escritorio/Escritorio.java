@@ -23,13 +23,14 @@ public class Escritorio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
+    private String abreviatura;
+    private String descricao;
 
-    @OneToMany(mappedBy = "escritorio")
+    @OneToMany(mappedBy = "escritorio", cascade = CascadeType.ALL)
     private List<Membro> membros;
 
-    @OneToMany(mappedBy = "escritorio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "escritorio", cascade = CascadeType.ALL)
     private List<Jurisdicao> jurisdicoes;
 
     @OneToOne(cascade = CascadeType.MERGE)
@@ -74,6 +75,22 @@ public class Escritorio {
 
     public void setJurisdicoes(List<Jurisdicao> jurisdicoes) {
         this.jurisdicoes = jurisdicoes;
+    }
+
+    public String getAbreviatura() {
+        return abreviatura;
+    }
+
+    public void setAbreviatura(String abreviatura) {
+        this.abreviatura = abreviatura;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
 }
